@@ -3,6 +3,7 @@ import Root from "../roots/Root";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
+import JobDetails from "../pages/JobDetails";
 
 const router = createBrowserRouter([
     {
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
             {
                 path: '/register',
                 element: <Register></Register>
+            },
+            {
+                path: '/job-details/:id',
+                element: <JobDetails></JobDetails>
             }
         ]
     }
