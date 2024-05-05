@@ -12,11 +12,11 @@ const JobDetails = () => {
     const { user } = useContext(AuthContext)
 
     const job = useLoaderData()
-    const { _id, buyer_email, job_title, deadline, description, category, min_price, max_price } = job || {}
+    const { _id, buyer, job_title, deadline, description, category, min_price, max_price } = job || {}
 
     const handleBid = async e => {
         e.preventDefault()
-        if (user?.email === buyer_email)
+        if (user?.email === buyer?.email)
             return toast.error('Action not permitted!')
 
         const form = e.target;
@@ -26,12 +26,21 @@ const JobDetails = () => {
         if (price < parseFloat(min_price))
             return toast.error('Offer more or at least equal to Minimum Price.')
         const comment = form.comment.value;
-        // const buyer_email = buyer_email;
+        // const buyer = buyer?.email;
         const deadline = startDate;
         const status = 'Pending'
 
         const bidData = {
-            jobId, email, price, comment, buyer_email, deadline, status, job_title, category
+            jobId,
+            email,
+            price,
+            comment,
+            deadline,
+            status,
+            job_title,
+            category,
+            buyer,
+            buyer_email: buyer?.email,
         }
         try{
             const {data} = await axios.post(`${import.meta.env.VITE_API_URL}/bid`, bidData)
@@ -50,7 +59,7 @@ const JobDetails = () => {
             <div className='flex-1  px-4 py-7 bg-white rounded-md shadow-md md:min-h-[350px]'>
                 <div className='flex items-center justify-between'>
                     <span className='text-sm font-light text-gray-800 '>
-                        Deadline: {deadline}
+                        Deadline: {new Date(deadline).toLocaleDateString()}
                     </span>
                     <span className='px-4 py-1 text-xs text-blue-800 uppercase bg-blue-200 rounded-full '>
                         {category}
@@ -70,13 +79,13 @@ const JobDetails = () => {
                     </p>
                     <div className='flex items-center gap-5'>
                         <div>
-                            <p className='mt-2 text-sm  text-gray-600 '>Name: Jhankar Vai.</p>
+                            <p className='mt-2 text-sm  text-gray-600 '>Name: {buyer?.name}</p>
                             <p className='mt-2 text-sm  text-gray-600 '>
-                                Email: jhankar@mahbub.com
+                                Email: {buyer?.email}
                             </p>
                         </div>
                         <div className='rounded-full object-cover overflow-hidden w-14 h-14'>
-                            <img src='' alt='' />
+                            <img src={buyer?.photo} alt='' />
                         </div>
                     </div>
                     <p className='mt-6 text-lg font-bold text-gray-600 '>
